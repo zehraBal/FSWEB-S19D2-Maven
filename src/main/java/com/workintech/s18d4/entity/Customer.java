@@ -1,5 +1,6 @@
 package com.workintech.s18d4.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
@@ -36,8 +37,9 @@ public class Customer {
     @JoinColumn(name="address_id")
     private Address address;
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "customer")
-    private List<Account> accounts;
+    private List<Account> accounts= new ArrayList<>();;
 
     public void addAccount(Account account){
         if(account==null){

@@ -25,7 +25,7 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public Account find(long id) {
-        return accountRepository.findById(id).orElseThrow(()->new RuntimeException());
+        return accountRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -36,7 +36,9 @@ public class AccountServiceImpl implements AccountService{
     @Override
     public Account delete(long id) {
         Account acc=find(id);
-        accountRepository.deleteById(id);
+        if(acc!=null){
+            accountRepository.delete(acc);
+        }
         return acc;
     }
 }

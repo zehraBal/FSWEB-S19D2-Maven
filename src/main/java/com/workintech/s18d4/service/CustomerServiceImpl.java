@@ -22,7 +22,7 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public Customer find(long id) {
-        return customerRepository.findById(id).orElseThrow(()->new RuntimeException());
+        return customerRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -45,7 +45,9 @@ public class CustomerServiceImpl implements CustomerService{
     @Override
     public Customer delete(long id) {
         Customer customer=find(id);
-        customerRepository.deleteById(id);
+        if(customer!=null){
+            customerRepository.delete(customer);
+        }
         return customer;
     }
 }

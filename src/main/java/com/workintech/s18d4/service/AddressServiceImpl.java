@@ -25,7 +25,7 @@ public class AddressServiceImpl implements AddressService{
 
     @Override
     public Address find(long id) {
-       return addressRepository.findById(id).orElseThrow(()-> new RuntimeException());
+       return addressRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -47,7 +47,9 @@ public class AddressServiceImpl implements AddressService{
     @Override
     public Address delete(long id) {
         Address address=find(id);
-         addressRepository.deleteById(id);
+        if(address!=null){
+            addressRepository.delete(address);
+        }
          return address;
     }
 }

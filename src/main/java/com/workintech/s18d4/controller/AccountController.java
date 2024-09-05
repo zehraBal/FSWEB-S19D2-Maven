@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/account")
-
 public class AccountController {
     private final AccountService accountService;
     private final CustomerService customerService;
@@ -25,13 +24,16 @@ public class AccountController {
     }
 
     @GetMapping
-    public List<Account> getAll(){
+    public List<Account> findAll(){
         return accountService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Account get(@PathVariable long id){
-        return accountService.find(id);
+    public AccountResponse find(@PathVariable long id){
+        Account account= accountService.find(id);
+        Customer customer=account.getCustomer();
+        CustomerResponse cRes=new CustomerResponse(customer.getId(),customer.getEmail(),customer.getSalary());
+        return new AccountResponse(account.getId(),account.getAccountName(),account.getMoneyAmount(),cRes);
     }
 
 //    [POST]/workintech/accounts/{customerId} => Parametre olarak gelen id ile ilgili customeri bulur
@@ -42,7 +44,7 @@ public class AccountController {
         Customer customer = customerService.find(customerId);
         account.setCustomer(customer);
         customer.addAccount(account);
-        customerService.save(customer);
+        accountService.save(account);
         CustomerResponse cRes=new CustomerResponse(customer.getId(),customer.getEmail(),customer.getSalary());
         return new AccountResponse(account.getId(),account.getAccountName(),account.getMoneyAmount(),cRes);
     }
@@ -61,7 +63,10 @@ public class AccountController {
     }
 
     @DeleteMapping("/{id}")
-    public Account delete(@PathVariable long id){
-        return accountService.delete(id);
+    public AccountResponse delete(@PathVariable long id){
+       Account account = accountService.delete(id);
+        Customer customer=account.getCustomer();
+        CustomerResponse cRes=new CustomerResponse(customer.getId(),customer.getEmail(),customer.getSalary());
+        return new AccountResponse(account.getId(),account.getAccountName(),account.getMoneyAmount(),cRes);
     }
 }
